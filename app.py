@@ -90,8 +90,8 @@ elif selected_page == "Popular":
 
 
 elif selected_page == "Recommendation by Year":
-    # Disable inputs in the sidebar when "Popular" is selected
-    st.sidebar.markdown("### Popular Page")
+    # Disable inputs in the sidebar when "Recommendation by Year" is selected
+    st.sidebar.markdown("### Recommendation by Year")
     st.sidebar.selectbox("Movie", options=get_movie_list(), key="popular_movie", disabled=True)
     st.sidebar.selectbox("Recommendation Mode", options=["Content based", "Collaborative", "Collaborative Personalized"], key="popular_mode", disabled=True)
     year = st.sidebar.text_input("Enter a year (e.g., 1983):", "2000")
