@@ -6,10 +6,10 @@ from scripts.collaborative import recommend_collaborative   # Collaborative-base
 from scripts.collaborative_personalized import recommend_collaborative_personalized  # Collaborative-based Personalized recommendation function
 from scripts.popular_movies import getTopRatedMovies  # Popular movies function
 from scripts.popular_movies_year import popular_movie_year # Popular movies by year function
-
+from scripts.home import displayRandomMovies 
 
 # Function to display movies in a card format
-def recommend(movie_name, n_outputs, mode):
+def recommend(movie_name, n_outputs, mode, ):
     if mode == 'Content based':
         result = recommend_content_based(movie_name, n_outputs)
     elif mode == 'Collaborative':
@@ -32,19 +32,19 @@ def recommend(movie_name, n_outputs, mode):
             with col1:
                 st.write(title_div, unsafe_allow_html=True)
                 st.image(val['url'], width=200)
-                st.button('Watch Now', key=f"buy1_{i}")
+                st.button('Buy Now', key=f"buy1_{i}")
 
         elif i % 3 == 1:
             with col2:
                 st.write(title_div, unsafe_allow_html=True)
                 st.image(val['url'], width=200)
-                st.button('Watch Now', key=f"buy2_{i}")
+                st.button('Buy Now', key=f"buy2_{i}")
 
         else:
             with col3:
                 st.write(title_div, unsafe_allow_html=True)
                 st.image(val['url'], width=200)
-                st.button('Watch Now', key=f"buy3_{i}")
+                st.button('Buy Now', key=f"buy3_{i}")
 
 
 
@@ -55,8 +55,18 @@ def get_movie_list():
 
 
 # Streamlit UI
-st.title("Movie Recommendation System")
+st.title("CineBazaar")
 
+st.markdown("""Dive into the world of cinema with our curated collection of movies available for purchase. Whether you’re a fan of timeless classics or the latest blockbusters, we have something for everyone.\n
+Not sure what to watch next? Our personalized movie recommendation feature suggests titles tailored to your taste, making it easier than ever to find your next favorite film.
+Explore, discover, and enjoy the magic of movies with us!""")
+
+st.markdown("---")
+displayRandomMovies(10)  # Display random movies
+st.markdown("---")
+
+st.subheader("Movie Recommendations")
+st.markdown("Choose an option formovie recommendations:")
 selected_page = st.selectbox("", ["Recommendation", "Popular", "Recommendation by Year"], key="my_selectbox")
 
 # Depending on the selected page, show the appropriate content
@@ -72,8 +82,7 @@ if selected_page == "Recommendation":
 
     num_recommendations = st.sidebar.number_input("Number of Recommendations", min_value=1, max_value=10, value=5)
 
-    st.subheader("Click below to get a movie recommendation:")
-    if st.button("Recommend a Movie"):
+    if st.button("Recommend Movies"):
         if movie:
             recommend(movie, num_recommendations, mode)
         else:

@@ -1,5 +1,6 @@
 import pickle
 import numpy as np
+import streamlit as st
 
 
 # Collaborative-based recommendation function

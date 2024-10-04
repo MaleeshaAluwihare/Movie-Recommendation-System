@@ -21,11 +21,17 @@ def getTopRatedMovies(n_outputs):
             with col1:
                 st.write(title_div, unsafe_allow_html=True)
                 st.image(movie['Poster URL'], width=200)
+                st.button('Buy Now', key=f"buy3_{i}")
+
         elif i % 3 == 1:
             with col2:
                 st.write(title_div, unsafe_allow_html=True)
                 st.image(movie['Poster URL'], width=200)
+                st.button('Buy Now', key=f"buy3_{i}")
+
         else:
             with col3:
                 st.write(title_div, unsafe_allow_html=True)
                 st.image(movie['Poster URL'], width=200)
+                st.button('Buy Now', key=f"buy3_{i}")
+

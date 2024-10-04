@@ -1,4 +1,5 @@
 import pickle
+import streamlit as st
 
 # Content-based recommendation function
 def recommend_content_based(movie, n_outputs):
