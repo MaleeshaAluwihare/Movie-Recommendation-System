@@ -1,38 +1,58 @@
 import pickle
 
-# Collaborative-based Personalized recommendation function
-def recommend_collaborative_personalized(user_id, top_n=5):
-    # Load files
-    with open('PKL_Files/movie_rating_collaborative', 'rb') as file:
-        mov_ratings = pickle.load(file)
+def recommend_collaborative_personalized(user_id, top_n):
+    try:
+        with open('PKL_Files/movie_rating_collaborative', 'rb') as file:
+            mov_ratings = pickle.load(file)
 
-    with open('PKL_Files/similarity_scores_collaborative', 'rb') as file:
-        similarity_scores = pickle.load(file)
+        with open('PKL_Files/similarity_scores_collaborative', 'rb') as file:
+            similarity_scores = pickle.load(file)
 
-    with open('PKL_Files/pivot_table_collaborative', 'rb') as file:
-        pt = pickle.load(file)
+        with open('PKL_Files/pivot_table_collaborative', 'rb') as file:
+            pt = pickle.load(file)
+            
+        
+        # Ensure user_id is an integer
+        user_id = int(user_id) 
+        
+        # Check if the user_id exists in the pivot table
+        if user_id not in pt.columns:
+            
+            return f"User ID {user_id} not found in the systemm."
+
+        user_ratings = pt[user_id]
+        
+        if len(user_ratings) != len(pt.index):
+            return "Error: Mismatch between user ratings and movie indices."
 
 
-    # Get the user's ratings from the user-movie rating matrix
-    user_ratings = pt[user_id]
+        recommended_movies = []
 
-    # Create an empty list to store recommended movies
-    recommended_movies = []
+        for movie_index, similarity in enumerate(similarity_scores):
+            if user_ratings.iloc[movie_index] > 0:
+                continue
 
-    for movie_index, similarity in enumerate(similarity_scores):
-        item = []
+            temp_df = mov_ratings[mov_ratings['title'] == pt.index[movie_index]]
 
-        # Skip movies the user has already rated
-        if user_ratings[movie_index] > 0:
-            continue
+            # Ensure there's valid movie data
+            if temp_df.empty:
+                continue
 
-        temp_df = mov_ratings[mov_ratings['title'] == pt.index[movie_index]]
-        item.extend(list(temp_df.drop_duplicates('title')['title'].values))
+            # Prepare the movie dictionary
+            item = temp_df.drop_duplicates('title')['title'].values
+            if len(item) > 0:
+                movie_title = item[0]
+                movie_poster_url = temp_df['Poster URL'].values[0] if 'Poster URL' in temp_df.columns else None
 
-        d = dict()
-        d['title'] = item[0]
-        d['url'] = temp_df['Poster URL'].values.tolist()[0]
+                recommended_movies.append({
+                    'title': movie_title,
+                    'url': movie_poster_url,
+                })
 
-        recommended_movies.append(d)
+        # Return top_n recommendations
+        return recommended_movies[:top_n]
 
-    return recommended_movies[:5]
+    except FileNotFoundError as e:
+        return f"Error: {e}"
+    except KeyError as e:
+        return f"Error: {e} key not found in the dataset"

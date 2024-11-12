@@ -14,7 +14,7 @@ def recommend_content_based(movie, n_outputs):
 
     # Check if movie exists in the dataset
     if movie not in new_df['title'].values:
-        st.error(f"Movie '{movie}' not found in the content-based dataset.")
+        st.info(f"We don't have enough information to recommend movies related to '{movie.title()}' at the moment, but you can explore other popular titles in our database.")
         return []
 
     movie_index = new_df[new_df['title'] == movie].index[0]

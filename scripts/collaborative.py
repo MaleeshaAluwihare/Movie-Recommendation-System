@@ -19,7 +19,7 @@ def recommend_collaborative(movie, n_outputs):
 
     # Handle case where movie is not found
     if movie not in pt.index:
-        st.error(f"Movie '{movie}' not found in the collaborative dataset.")
+        st.info(f"We don't have enough information to recommend movies related to '{movie.title()}' at the moment, but you can explore other popular titles in our database.")
         return []
 
     index = np.where(pt.index == movie)[0][0]
